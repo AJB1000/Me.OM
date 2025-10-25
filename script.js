@@ -58,28 +58,28 @@ document.addEventListener("DOMContentLoaded", () => {
         net.attributes.src = 'reseauNO.svg'
     });
 
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('✅ SW enregistré :', reg.scope))
-                .catch(err => console.error('❌ Erreur SW :', err));
-        });
+    // if ('serviceWorker' in navigator) {
+    //     window.addEventListener('load', () => {
+    //         navigator.serviceWorker.register('/sw.js')
+    //             .then(reg => console.log('✅ SW enregistré :', reg.scope))
+    //             .catch(err => console.error('❌ Erreur SW :', err));
+    //     });
 
-        // Écoute les messages du SW
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'NAVIGATE') {
-                const newUrl = event.data.url;
+    //     // Écoute les messages du SW
+    //     navigator.serviceWorker.addEventListener('message', (event) => {
+    //         if (event.data && event.data.type === 'NAVIGATE') {
+    //             const newUrl = event.data.url;
 
-                console.log('🔁 Nouvelle navigation détectée depuis OruxMaps :', newUrl);
+    //             console.log('🔁 Nouvelle navigation détectée depuis OruxMaps :', newUrl);
 
-                // Compare avec l’URL actuelle
-                if (window.location.href !== newUrl) {
-                    // Recharge avec les nouveaux paramètres
-                    window.location.href = newUrl;
-                }
-            }
-        });
-    }
+    //             // Compare avec l’URL actuelle
+    //             if (window.location.href !== newUrl) {
+    //                 // Recharge avec les nouveaux paramètres
+    //                 window.location.href = newUrl;
+    //             }
+    //         }
+    //     });
+    // }
 });
 
 

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Récupérer les paramètres URL
     let p = new URLSearchParams(window.location.search);
     p = Object.fromEntries(p.entries());
-    const connexion = document.getElementById('connexion');
+    const net = document.getElementById('net');
     const links = document.getElementById('links');
     const infoDiv = document.getElementById('info');
 
@@ -50,21 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Écouter les changements de connexion
     window.addEventListener('online', () => {
         console.log('Connexion rétablie');
-        updateConnectionStatus(true);
+        net.style.fill = 'green';
     });
 
     window.addEventListener('offline', () => {
         console.log('Connexion perdue');
-        updateConnectionStatus(false);
+        net.style.fill = 'red';
     });
 });
 
-// Mettre à jour le statut de connexion dans l'interface
-function updateConnectionStatus(isOnline) {
-    if (connexion) {
-        connexion.innerHTML = `<strong>Réseau:</strong> ${isOnline ? '🟢' : '🔴'}`;
-    }
-}
 
 // Forcer le rechargement des paramètres (utile pour le debug)
 function reloadParams() {

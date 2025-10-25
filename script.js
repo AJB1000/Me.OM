@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Paramètres URL:', p);
     console.log('Nombre de paramètres:', Object.keys(p).length);
 
+    connexion.innerHTML = ' <p><strong>Mode :</strong> ${navigator.onLine ? '🟢 En ligne' : '🔴 Hors ligne'}</p>'
+
     // Afficher les informations
     if (infoDiv) {
         if (Object.keys(p).length > 0) {
@@ -21,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h2>${p.nom || 'Lieu inconnu'}</h2>
                 <p><strong>Échelle :</strong> 1:${p.scale || 'N/A'}</p>
                 <p><strong>Coordonnées :</strong> ${p.lat || 'N/A'}, ${p.lon || 'N/A'}</p>
-                <p><strong>Mode :</strong> ${navigator.onLine ? '🟢 En ligne' : '🔴 Hors ligne'}</p>
             `;
 
             // Debug dans la console (alert ne fonctionne pas toujours dans les PWA)
@@ -33,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
             infoDiv.innerHTML = `
                 <h2>Aucun paramètre</h2>
                 <p>Aucune donnée de localisation fournie.</p>
-                <p><strong>Mode :</strong> ${navigator.onLine ? '🟢 En ligne' : '🔴 Hors ligne'}</p>
             `;
             console.warn('Aucun paramètre URL trouvé');
         }

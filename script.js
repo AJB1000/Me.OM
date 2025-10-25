@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Paramètres URL:', p);
     console.log('Nombre de paramètres:', Object.keys(p).length);
 
-    connexion.innerHTML = `<p>Réseau ${navigator.onLine ? '🟢' : '🔴'}</p>`
+    // connexion.innerHTML = `<p>Réseau ${navigator.onLine ? '🟢' : '🔴'}</p>`
 
     // Afficher les informations
     if (infoDiv) {
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Mettre à jour le statut de connexion dans l'interface
 function updateConnectionStatus(isOnline) {
     if (connexion) {
-        connexion.innerHTML = `<strong>Mode :</strong> ${isOnline ? '🟢 En ligne' : '🔴 Hors ligne'}`;
+        connexion.innerHTML = `<strong>Réseau:</strong> ${isOnline ? '🟢' : '🔴'}`;
     }
 
     // showNotification(

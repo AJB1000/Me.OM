@@ -70,3 +70,26 @@ function reloadParams() {
 // Debug: Exposer la fonction dans la console pour tests
 window.debugParams = reloadParams;
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('✅ SW enregistré :', reg.scope))
+            .catch(err => console.error('❌ Erreur SW :', err));
+    });
+
+    // Écoute les messages du SW
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'NAVIGATE') {
+            const newUrl = event.data.url;
+
+            console.log('🔁 Nouvelle navigation détectée depuis OruxMaps :', newUrl);
+
+            // Compare avec l’URL actuelle
+            if (window.location.href !== newUrl) {
+                // Recharge avec les nouveaux paramètres
+                window.location.href = newUrl;
+            }
+        }
+    });
+}
+

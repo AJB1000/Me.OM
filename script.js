@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h2>${p.nom || 'Lieu inconnu'}</h2>
                 <p><strong>Échelle :</strong> 1:${p.scale || 'N/A'}</p>
                 <p><strong>Coordonnées :</strong> ${p.lat || 'N/A'}, ${p.lon || 'N/A'}</p>
+                
             `;
 
             // Debug dans la console (alert ne fonctionne pas toujours dans les PWA)

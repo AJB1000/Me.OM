@@ -1,6 +1,6 @@
 {
-  "name": "OM PWA",
-  "short_name": "OM add",
+  "name": "Me.OM",
+  "short_name": "me.OM",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",

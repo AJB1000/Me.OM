@@ -4,101 +4,55 @@ const CACHE_NAME = 'maps-pwa-v3'; // Changez la version à chaque modification
 
 // Fichiers à mettre en cache
 const FILES_TO_CACHE = [
-    './',
-    './index.html',
-    // Ajoutez ici vos autres fichiers (CSS, JS, images)
+    '/',
+    '/index.html',
+    '/script.js',
+    '/deepseek.css',
+    '/manifest.json',
+    '/icon-192.png',
+    '/icon-512.png'
 ];
 
-// Installation - Mise en cache des fichiers
+/// Installation classique
 self.addEventListener('install', event => {
-    console.log('[SW] Installation...');
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => {
-                console.log('[SW] Mise en cache des fichiers');
-                return cache.addAll(FILES_TO_CACHE);
-            })
-            .then(() => self.skipWaiting()) // Force l'activation immédiate
+        caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
     );
+    self.skipWaiting();
 });
 
-// Activation - Nettoyage des anciens caches
+// Activation et nettoyage
 self.addEventListener('activate', event => {
-    console.log('[SW] Activation...');
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('[SW] Suppression ancien cache:', cacheName);
-                        return caches.delete(cacheName);
+        caches.keys().then(keys =>
+            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+        )
+    );
+    self.clients.claim();
+});
+
+// Interception des navigations (liens venant d’OruxMaps)
+self.addEventListener('fetch', event => {
+    // On n’intercepte que les navigations vers la page principale
+    if (event.request.mode === 'navigate') {
+        const url = event.request.url;
+
+        // On envoie un message à toutes les pages contrôlées
+        event.waitUntil(
+            self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+                .then(clients => {
+                    for (const client of clients) {
+                        client.postMessage({
+                            type: 'NAVIGATE',
+                            url: url
+                        });
                     }
                 })
-            );
-        })
-            .then(() => self.clients.claim()) // Prend le contrôle immédiatement
-    );
-});
+        );
 
-// Fetch - INTERCEPTION DE TOUTES LES REQUÊTES
-self.addEventListener('fetch', event => {
-    const url = new URL(event.request.url);
-
-    console.log('[SW] Fetch:', url.pathname, 'Mode:', event.request.mode);
-
-    // Ignorer les requêtes externes (APIs, CDN, etc.)
-    if (url.origin !== self.location.origin) {
-        console.log('[SW] Requête externe ignorée:', url.href);
-        return;
+        // Répond quand même avec la page mise en cache
+        event.respondWith(
+            caches.match('/index.html').then(resp => resp || fetch(event.request))
+        );
     }
-
-    // STRATÉGIE CACHE-FIRST POUR TOUT
-    event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) {
-                    console.log('[SW] Réponse depuis cache:', url.pathname);
-                    return cachedResponse;
-                }
-
-                // Si pas en cache, essayer le réseau
-                console.log('[SW] Pas en cache, récupération réseau:', url.pathname);
-                return fetch(event.request)
-                    .then(response => {
-                        // Ne pas mettre en cache les erreurs
-                        if (!response || response.status !== 200) {
-                            return response;
-                        }
-
-                        // Cloner la réponse pour la mettre en cache
-                        const responseToCache = response.clone();
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                        return response;
-                    })
-                    .catch(error => {
-                        console.log('[SW] Erreur réseau:', error);
-
-                        // Pour les pages HTML, retourner index.html du cache
-                        if (event.request.mode === 'navigate') {
-                            return caches.match('./index.html')
-                                .then(response => {
-                                    if (response) {
-                                        console.log('[SW] Fallback vers index.html');
-                                        return response;
-                                    }
-                                    // Si même index.html n'est pas en cache
-                                    return new Response(
-                                        '<html><body><h1>Erreur</h1><p>Impossible de charger la page hors ligne.</p></body></html>',
-                                        { headers: { 'Content-Type': 'text/html' } }
-                                    );
-                                });
-                        }
-
-                        throw error;
-                    });
-            })
-    );
 });

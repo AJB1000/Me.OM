@@ -1,6 +1,6 @@
 // sw.js
 
-const CACHE_NAME = 'maps-pwa-v3'; // Changez la version à chaque modification
+const CACHE_NAME = 'maps-pwa-v41'; // Changez la version à chaque modification
 
 // Fichiers à mettre en cache
 const FILES_TO_CACHE = [

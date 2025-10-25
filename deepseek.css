@@ -416,3 +416,9 @@ input[type="radio"] {
 .radio-group {
     margin-bottom: 15px;
 }
+
+.logo{
+    width: 64px;
+    height: 64px;
+    transition: fill 0.3s ease;
+}

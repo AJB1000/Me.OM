@@ -1,6 +1,6 @@
 // sw.js
 
-const CACHE_NAME = 'maps-pwa-v32'; // Changez la version à chaque modification
+const CACHE_NAME = 'maps-pwa-v33'; // Changez la version à chaque modification
 
 // Fichiers à mettre en cache
 const FILES_TO_CACHE = [
@@ -102,55 +102,3 @@ self.addEventListener('fetch', event => {
             })
     );
 });
-
-// const CACHE_NAME = 'v19';
-// const urlsToCache = [
-//     '/',
-//     '/index.html',
-//     '/manifest.json',
-//     '/icon-192.png',
-//     // ajoutez vos autres assets statiques
-// ];
-
-// self.addEventListener('install', event => {
-//     event.waitUntil(
-//         caches.open(CACHE_NAME)
-//             .then(cache => cache.addAll(urlsToCache))
-//     );
-// });
-
-// self.addEventListener('fetch', event => {
-//     const url = new URL(event.request.url);
-//     // console.log(url.origin, url.pathname, location)
-//     // Si c’est une requête vers la racine ou avec des paramètres
-//     if (url.origin === location.origin && (url.pathname === '/' || url.pathname === '/index.html')) {
-//         event.respondWith(
-//             caches.match('/index.html')
-//                 .then(response => { return response || fetch(event.request) })
-//         )
-//     }
-// });
-
-// self.addEventListener('fetch', event => {
-//     const url = new URL(event.request.url);
-//     // Ne gérer que les requêtes vers votre site
-//     if (url.origin !== self.location.origin) return;
-//     // Si c'est la page racine (même avec paramètres), servir index.html
-//     let ref = new URL(event.request.referrer);
-//     ref = ref.search
-//     console.log('fetch', ref)
-//     if (url.pathname === '/' || url.pathname === '/index.html') {
-//         event.respondWith(
-//             caches.match('/index.html'
-//                 .then(response => '/index.html' + ref || fetch(event.request))
-//             );
-//         return;
-//     }
-
-//     // Pour les autres ressources (JS, CSS, images), stratégie cache-first
-//     event.respondWith(
-//         caches.match(event.request)
-//             .then(response => response || fetch(event.request))
-//     );
-// });
-

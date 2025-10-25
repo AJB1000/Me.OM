@@ -1,6 +1,6 @@
 // sw.js
 
-const CACHE_NAME = 'maps-pwa-v44'; // Changez la version à chaque modification
+const CACHE_NAME = 'maps-pwa-v45'; // Changez la version à chaque modification
 
 // Fichiers à mettre en cache
 const FILES_TO_CACHE = [
@@ -9,7 +9,8 @@ const FILES_TO_CACHE = [
     '/script.js',
     '/deepseek.css',
     '/manifest.json',
-    '/icon-192.png'
+    '/icon-192.png',
+    '/icon-512.png'
 ];
 
 /// Installation classique

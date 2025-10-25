@@ -6,13 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Récupérer les paramètres URL
     let p = new URLSearchParams(window.location.search);
     p = Object.fromEntries(p.entries());
+    const links = document.getElementById('links');
+    const infoDiv = document.getElementById('info');
 
     // Debug détaillé
     console.log('Paramètres URL:', p);
     console.log('Nombre de paramètres:', Object.keys(p).length);
 
     // Afficher les informations
-    const infoDiv = document.getElementById('info');
     if (infoDiv) {
         if (Object.keys(p).length > 0) {
             infoDiv.innerHTML = `
@@ -105,9 +106,9 @@ function showNotification(message, type = 'info') {
 
 // Mettre à jour le statut de connexion dans l'interface
 function updateConnectionStatus(isOnline) {
-    const infoDiv = document.getElementById('info');
-    if (infoDiv) {
-        const statusElement = infoDiv.querySelector('p:last-child');
+    // const infoDiv = document.getElementById('info');
+    if (links) {
+        const statusElement = links.querySelector('p:first-child');
         if (statusElement) {
             statusElement.innerHTML = `<strong>Mode :</strong> ${isOnline ? '🟢 En ligne' : '🔴 Hors ligne'}`;
         }

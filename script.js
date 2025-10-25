@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Paramètres URL:', p);
     console.log('Nombre de paramètres:', Object.keys(p).length);
 
-    connexion.innerHTML = `<p>${navigator.onLine ? '🟢 En ligne' : '🔴 Hors ligne'}</p>`
+    connexion.innerHTML = `<p>Réseau ${navigator.onLine ? '🟢' : '🔴'}</p>`
 
     // Afficher les informations
     if (infoDiv) {

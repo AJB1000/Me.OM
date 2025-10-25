@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Paramètres URL:', p);
     console.log('Nombre de paramètres:', Object.keys(p).length);
 
-    net.src = navigator.onLine ? 'reseauOK.svg' : 'reseauNO.svg'
+    net.attributes.src = navigator.onLine ? 'reseauOK.svg' : 'reseauNO.svg'
 
     // Afficher les informations
     if (infoDiv) {
@@ -50,12 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Écouter les changements de connexion
     window.addEventListener('online', () => {
         console.log('Connexion rétablie');
-        net.src = 'reseauOK.svg'
+        net.attributes.src = 'reseauOK.svg'
     });
 
     window.addEventListener('offline', () => {
         console.log('Connexion perdue');
-        net.src = 'reseauNO.svg'
+        net.attributes.src = 'reseauNO.svg'
     });
 });
 

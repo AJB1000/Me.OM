@@ -1,6 +1,6 @@
 // sw.js
 
-const CACHE_NAME = 'maps-pwa-v41'; // Changez la version à chaque modification
+const CACHE_NAME = 'maps-pwa-v42'; // Changez la version à chaque modification
 
 // Fichiers à mettre en cache
 const FILES_TO_CACHE = [
@@ -18,18 +18,18 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
     );
-    self.skipWaiting();
+    // self.skipWaiting();
 });
 
 // Activation et nettoyage
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-        )
-    );
-    self.clients.claim();
-});
+// self.addEventListener('activate', event => {
+//     event.waitUntil(
+//         caches.keys().then(keys =>
+//             Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+//         )
+//     );
+//     self.clients.claim();
+// });
 
 // Interception des navigations (liens venant d’OruxMaps)
 self.addEventListener('fetch', event => {

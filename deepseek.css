@@ -418,7 +418,7 @@ input[type="radio"] {
 }
 
 .logo{
-    width: 64px;
-    height: 64px;
+    width: 32px;
+    height: 32px;
     transition: fill 0.3s ease;
 }

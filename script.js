@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Récupérer les paramètres URL
     let p = new URLSearchParams(window.location.search);
     p = Object.fromEntries(p.entries());
+    const connexion = document.getElementById('connexion');
     const links = document.getElementById('links');
     const infoDiv = document.getElementById('info');
 
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log('Scale:', p.scale);
 
             // Afficher une notification visuelle au lieu d'alert
-            showNotification(`Échelle: ${p.scale || 'N/A'}`, 'info');
+            // showNotification(`Échelle: ${p.scale || 'N/A'}`, 'info');
         } else {
             infoDiv.innerHTML = `
                 <h2>Aucun paramètre</h2>
@@ -60,64 +61,60 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Fonction pour afficher une notification visuelle (remplace alert)
-function showNotification(message, type = 'info') {
-    // Créer un élément de notification
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        background: ${type === 'info' ? '#3498db' : '#e74c3c'};
-        color: white;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        z-index: 10000;
-        font-family: Arial, sans-serif;
-        max-width: 300px;
-        animation: slideIn 0.3s ease-out;
-    `;
-    notification.textContent = message;
+// function showNotification(message, type = 'info') {
+//     // Créer un élément de notification
+//     const notification = document.createElement('div');
+//     notification.style.cssText = `
+//         position: fixed;
+//         top: 20px;
+//         right: 20px;
+//         padding: 15px 20px;
+//         background: ${type === 'info' ? '#3498db' : '#e74c3c'};
+//         color: white;
+//         border-radius: 5px;
+//         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+//         z-index: 10000;
+//         font-family: Arial, sans-serif;
+//         max-width: 300px;
+//         animation: slideIn 0.3s ease-out;
+//     `;
+//     notification.textContent = message;
 
-    // Ajouter l'animation CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+//     // Ajouter l'animation CSS
+//     const style = document.createElement('style');
+//     style.textContent = `
+//         @keyframes slideIn {
+//             from {
+//                 transform: translateX(400px);
+//                 opacity: 0;
+//             }
+//             to {
+//                 transform: translateX(0);
+//                 opacity: 1;
+//             }
+//         }
+//     `;
+//     document.head.appendChild(style);
 
-    document.body.appendChild(notification);
+//     document.body.appendChild(notification);
 
-    // Supprimer après 3 secondes
-    setTimeout(() => {
-        notification.style.animation = 'slideIn 0.3s ease-out reverse';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+//     // Supprimer après 3 secondes
+//     setTimeout(() => {
+//         notification.style.animation = 'slideIn 0.3s ease-out reverse';
+//         setTimeout(() => notification.remove(), 300);
+//     }, 3000);
+// }
 
 // Mettre à jour le statut de connexion dans l'interface
 function updateConnectionStatus(isOnline) {
-    // const infoDiv = document.getElementById('info');
-    if (links) {
-        const statusElement = links.querySelector('p:first-child');
-        if (statusElement) {
-            statusElement.innerHTML = `<strong>Mode :</strong> ${isOnline ? '🟢 En ligne' : '🔴 Hors ligne'}`;
-        }
+    if (connexion) {
+        connexion.innerHTML = `<strong>Mode :</strong> ${isOnline ? '🟢 En ligne' : '🔴 Hors ligne'}`;
     }
 
-    showNotification(
-        isOnline ? 'Connexion rétablie' : 'Mode hors ligne',
-        isOnline ? 'info' : 'warning'
-    );
+    // showNotification(
+    //     isOnline ? 'Connexion rétablie' : 'Mode hors ligne',
+    //     isOnline ? 'info' : 'warning'
+    // );
 }
 
 // Forcer le rechargement des paramètres (utile pour le debug)

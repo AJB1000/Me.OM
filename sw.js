@@ -1,57 +1,69 @@
-// sw.js
-
-const CACHE_NAME = 'maps-pwa-v48'; // Changez la version à chaque modification
-
-// Fichiers à mettre en cache
+const CACHE_NAME = 'map-pwa-v4';
 const FILES_TO_CACHE = [
     './',
     './index.html',
+    './offline.html',
     './script.js',
-    './deepseek.css',
     './manifest.json',
-    './icon-192.png'
+    './icons/icon-192.png',
+    './icons/icon-512.png'
 ];
 
-/// Installation classique
+// --- INSTALLATION ---
 self.addEventListener('install', event => {
+    console.log('📦 Installation du Service Worker...');
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
     );
-    // self.skipWaiting();
+    self.skipWaiting();
 });
 
-// Activation et nettoyage
-// self.addEventListener('activate', event => {
-//     event.waitUntil(
-//         caches.keys().then(keys =>
-//             Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-//         )
-//     );
-//     self.clients.claim();
-// });
+// --- ACTIVATION ---
+self.addEventListener('activate', event => {
+    console.log('⚙️ Activation du SW...');
+    event.waitUntil(
+        caches.keys().then(keys =>
+            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+        )
+    );
+    self.clients.claim();
+});
 
-// Interception des navigations (liens venant d’OruxMaps)
+// --- INTERCEPTION DES REQUÊTES ---
 self.addEventListener('fetch', event => {
-    // On n’intercepte que les navigations vers la page principale
-    if (event.request.mode === 'navigate') {
-        const url = event.request.url;
+    const url = new URL(event.request.url);
 
-        // On envoie un message à toutes les pages contrôlées
-        event.waitUntil(
-            self.clients.matchAll({ type: 'window', includeUncontrolled: true })
-                .then(clients => {
-                    for (const client of clients) {
-                        client.postMessage({
-                            type: 'NAVIGATE',
-                            url: url
-                        });
-                    }
+    // 🔹 Cas 1 : navigation ou URL avec paramètres
+    if (event.request.mode === 'navigate' || url.search) {
+        event.respondWith(
+            fetch(event.request)
+                .then(response => {
+                    // Si le réseau répond, on le renvoie
+                    return response;
+                })
+                .catch(() => {
+                    // Sinon on renvoie toujours index.html depuis le cache
+                    return caches.match('index.html')
+                        .then(resp => resp || caches.match('./index.html'))
+                        .then(resp => resp || caches.match('offline.html'));
                 })
         );
 
-        // Répond quand même avec la page mise en cache
-        event.respondWith(
-            caches.match('/index.html').then(resp => resp || fetch(event.request))
+        // Prévenir les pages ouvertes de la nouvelle navigation
+        event.waitUntil(
+            self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+                .then(clients => {
+                    clients.forEach(client => client.postMessage({
+                        type: 'NAVIGATE',
+                        url: event.request.url
+                    }));
+                })
         );
+        return;
     }
+
+    // 🔹 Cas 2 : autres ressources (scripts, icônes, etc.)
+    event.respondWith(
+        caches.match(event.request).then(response => response || fetch(event.request))
+    );
 });

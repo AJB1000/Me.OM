@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuel Python - Best Practices</title>
+    <link rel="stylesheet" href="deepseek.css">
+    <link rel="manifest" href="manifest.json">
+     <script>
+        // Enregistrer le service worker (cache PWA)
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
+        }
+        // if ('serviceWorker' in navigator) {
+        //     window.addEventListener('load', () => {
+        //         navigator.serviceWorker.register('sw.js')
+        //             .then(reg => console.log('✅ SW enregistré :', reg.scope))
+        //             .catch(err => console.error('❌ Erreur SW :', err));
+        //     });
+
+        //     // Écoute les messages du SW
+        //     navigator.serviceWorker.addEventListener('message', (event) => {
+        //         if (event.data && event.data.type === 'NAVIGATE') {
+        //             const newUrl = event.data.url;
+
+        //             console.log('🔁 Nouvelle navigation détectée depuis OruxMaps :', newUrl);
+
+        //             // Compare avec l’URL actuelle
+        //             if (window.location.href !== newUrl) {
+        //                 // Recharge avec les nouveaux paramètres
+        //                 window.location.href = newUrl;
+        //             }
+        //         }
+        //     });
+        // }
+     </script>     
+</head>
+
+<body>
+    <div id="myHtml"></div>
+        <header>
+            <h1>{{data.name}}</h1>
+            <p>Localité de: {{data.localite}}, {{data.country}}</p>
+        </header>
+        <p style="width:inherit;text-align: end;position: relative;top:-2vh">
+            <img id="net" class="net" ></img>
+        </p>
+        <div class="toc">    
+            <h2>Liens internet généraux</h2>
+            <div id="links"></div>
+        </div>
+
+        <section id="Tags">
+            <h2>Tags OSM</h2>
+            <div id="info"></div>
+        </section>
+
+        <footer>
+            <p>Informations complémentaires à Oruxmaps</p>
+            <p>© 2025 - André J. Becker</p>
+        </footer>
+        </script>
+         <script type="module" src="script.js"></script>    
+    </body>
+
+    </html>

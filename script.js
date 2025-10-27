@@ -1,95 +1,40 @@
-// Script à placer dans votre index.html ou fichier JS séparé
-
-document.addEventListener("DOMContentLoaded", () => {
-    console.log('DOM chargé, URL complète:', window.location.href);
-
-    // Récupérer les paramètres URL
-    let p = new URLSearchParams(window.location.search);
-    p = Object.fromEntries(p.entries());
-    const net = document.getElementById('net');
-    const links = document.getElementById('links');
-    const infoDiv = document.getElementById('info');
-
-    // Debug détaillé
-    console.log('Paramètres URL:', p);
-    console.log('Nombre de paramètres:', Object.keys(p).length);
-
-    net.attributes.src = navigator.onLine ? 'reseauOK.svg' : 'reseauNO.svg'
-
-    // Afficher les informations
-    if (infoDiv) {
-        if (Object.keys(p).length > 0) {
-            infoDiv.innerHTML = `
-                <h2>${p.nom || 'Lieu inconnu'}</h2>
-                <p><strong>Échelle :</strong> 1:${p.scale || 'N/A'}</p>
-                <p><strong>Coordonnées :</strong> ${p.lat || 'N/A'}, ${p.lon || 'N/A'}</p>
-                
-            `;
-
-            // Debug dans la console (alert ne fonctionne pas toujours dans les PWA)
-            console.log('Scale:', p.scale);
-
-        } else {
-            infoDiv.innerHTML = `
-                <h2>Aucun paramètre</h2>
-                <p>Aucune donnée de localisation fournie.</p>
-            `;
-            console.warn('Aucun paramètre URL trouvé');
-        }
-    } else {
-        console.error('Element #info non trouvé dans le DOM');
-    }
-
-    // Vérifier le statut du service worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(registration => {
-            console.log('Service Worker actif:', registration.active);
-        });
-    }
-
-    // Écouter les changements de connexion
-    window.addEventListener('online', () => {
-        console.log('Connexion rétablie');
-        net.attributes.src = 'reseauOK.svg'
-    });
-
-    window.addEventListener('offline', () => {
-        console.log('Connexion perdue');
-        net.attributes.src = 'reseauNO.svg'
-    });
-
-    // if ('serviceWorker' in navigator) {
-    //     window.addEventListener('load', () => {
-    //         navigator.serviceWorker.register('/sw.js')
-    //             .then(reg => console.log('✅ SW enregistré :', reg.scope))
-    //             .catch(err => console.error('❌ Erreur SW :', err));
-    //     });
-
-    // Écoute les messages du SW
-    navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'NAVIGATE') {
-            const newUrl = event.data.url;
-
-            console.log('🔁 Nouvelle navigation détectée depuis OruxMaps :', newUrl);
-
-            // Compare avec l’URL actuelle
-            if (window.location.href !== newUrl) {
-                // Recharge avec les nouveaux paramètres
-                window.location.href = newUrl;
-            }
-        }
-    });
-    // }
-});
-
-
-// Forcer le rechargement des paramètres (utile pour le debug)
-function reloadParams() {
-    console.log('Rechargement des paramètres...');
-    const event = new Event('DOMContentLoaded');
-    document.dispatchEvent(event);
+// --- Enregistrement du Service Worker ---
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('✅ SW enregistré', reg.scope))
+        .catch(err => console.error('❌ Erreur SW', err));
 }
 
-// Debug: Exposer la fonction dans la console pour tests
-window.debugParams = reloadParams;
+// --- Lecture des paramètres URL ---
+function getParams() {
+    const params = new URLSearchParams(window.location.search);
+    const lat = params.get('lat');
+    const lon = params.get('lon');
+    return { lat, lon };
+}
 
+// --- Mise à jour du contenu ---
+function updatePage() {
+    const { lat, lon } = getParams();
+    const el = document.getElementById('status');
+
+    if (lat && lon) {
+        el.textContent = `📍 Latitude : ${lat}, Longitude : ${lon}`;
+    } else {
+        el.textContent = `Aucune position reçue.`;
+    }
+}
+
+window.addEventListener('popstate', updatePage);
+updatePage();
+
+// --- Réception des messages du SW ---
+navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data && event.data.type === 'NAVIGATE') {
+        const newUrl = event.data.url;
+        console.log('🔁 Navigation interceptée :', newUrl);
+        if (window.location.href !== newUrl) {
+            window.location.href = newUrl;
+        }
+    }
+});

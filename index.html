@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>PWA Carte Orux</title>
-
+  <link rel="stylesheet" href="deepseek.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#317EFB">
 
@@ -19,6 +19,26 @@
 <body>
   <h1>PWA Carte Orux</h1>
   <p id="status">Chargement...</p>
+
+  <body>
+    <div id="myHtml"></div>
+        <header>
+            <h1>{{data.name}}</h1>
+            <p>Localité de: {{data.localite}}, {{data.country}}</p>
+        </header>
+        <p style="width:inherit;text-align: end;position: relative;top:-2vh">
+            <img id="net" class="net" ></img>
+        </p>
+        <div class="toc">    
+            <h2>Liens internet généraux</h2>
+            <div id="links"></div>
+        </div>
+
+        <section id="Tags">
+            <h2>Tags OSM</h2>
+            <div id="info"></div>
+        </section>
+
 
   <script src="script.js"></script>
 </body>

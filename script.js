@@ -25,11 +25,11 @@ const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
     linkList.innerHTML = `
-    <p><a class="${disable}" href="https://www.peakfinder.org/fr?lat=${lat}&lon=${lon}">Sommets proches</a></p>
-    <p><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></p>
-    <p><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></p>
-    <p><a class="${disable}" href="https://fr.wikipedia.org/wiki/${loc}">Wikipedia (${locality ?? '...'})</a></p>
-    <p><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike">Komoot</a></p>
+    <tr><td><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></td>
+    <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike">Komoot</a></td></tr>
+    <tr><td><a class="${disable}" href="https://fr.wikipedia.org/wiki/${loc}">Wikipedia (${locality ?? '...'})</a></td><td></td></tr>
+    <tr><td><a class="${disable}" href="https://www.peakfinder.org/fr?lat=${lat}&lon=${lon}">Sommets proches</a></td>
+    <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
 
   `;
 };
@@ -40,7 +40,7 @@ if (Object.keys(extras).length === 0) {
     table.innerHTML = '<tr><td>Aucun paramètre additionnel</td></tr>';
 } else {
     table.innerHTML = `
-    <tr><th>Nom</th><th>Valeur</th></tr>
+    <tr><th>Attributs</th><th>Valeur</th></tr>
     ${Object.entries(extras)
             .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`)
             .join('')}

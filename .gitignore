@@ -1,8 +1,4 @@
-readme.md
-deploy.sh
-gitinit.sh
+*.md
+*.sh
 *.zip
-deepseek.css
-offline.html
-indexOld.html
 dummy

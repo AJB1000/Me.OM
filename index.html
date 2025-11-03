@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#8a2f25">
+  <title>Me.OM</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 1em;
+      background: #f8f9fa;
+      color: #333;
+      transition: opacity 0.3s ease-in;
+    }
+    header, footer {
+      text-align: center;
+      padding: 0.5em;
+      background: #e74c3c;
+      color: white;
+      border-radius: 8px;
+    }
+    section {
+      margin-top: 1em;
+      padding: 1em;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    a {
+      color: #e74c3c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.disabled {
+      color: gray;
+      pointer-events: none;
+      text-decoration: line-through;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 0.5em;
+      text-align: left;
+    }
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+  }
+  footer{
+    margin-top: 1em;
+  }
+  #status {
+      text-align: center;
+      margin-top: 0.5em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="locality">Chargement...</h1>
+    <p>Coordonnées: <span id="lat">?</span>, <span id="lon">?</span></p>
+  </header>
+
+  <section id="links">
+    <h2>Liens utiles</h2>
+    <div id="linkList">Chargement des liens...</div>
+  </section>
+
+  <section id="info">
+    <h2>Données OSM</h2>
+    <table id="paramTable"></table>
+  </section>
+
+  <footer>
+    <p>Informations complémentaires à Oruxmaps</p>
+    <p>© 2025 - André J. Becker</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

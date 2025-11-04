@@ -24,15 +24,27 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
+    let refugeUrl = ""
+    refugeUrl += ('refuges_info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['refuges_info']}">Refuges-info,nbsp;</a>` : ""
+    refugeUrl += ('campwild' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['campwild']}">Campwild.org</a>` : ""
+
+    const day = new Date()
+    const dayf = day.toISOString().split('T')[0]
+    day.setDate(day.getDate() + 1);
+    const tomorrowf = day.toISOString().split('T')[0]
+
     linkList.innerHTML = `
     <tr><td><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></td>
     <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike">Komoot</a></td></tr>
-    <tr><td><a class="${disable}" href="https://fr.wikipedia.org/wiki/${loc}">Wikipedia (${locality ?? '...'})</a></td><td></td></tr>
-    <tr><td><a class="${disable}" href="https://www.peakfinder.org/fr?lat=${lat}&lon=${lon}">Sommets proches</a></td>
+    <tr><td><a class="${disable}" href="https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}">Wikipedia proches</a></td>
+    <td>${refugeUrl}</td></tr>
+    <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
-
+    <tr><td><a class="${disable}" href="https://www.rome2rio.com/fr/map/${loc}">Transports</a></td>
+    <td><a class="${disable}" href="https://www.booking.com/searchresults.fr.html?ss=${loc}&group_adults=2&group_children=0&no_rooms=1&checkin=${dayf}&checkout=${tomorrowf}">Hébergements</a></td></tr>
   `;
 };
+
 
 // --- Build parameter table ---
 const table = document.getElementById('paramTable');
@@ -92,4 +104,3 @@ async function getLocalityGeoNames(lat, lon) {
         return 'Inconnue (offline ?)';
     }
 }
-

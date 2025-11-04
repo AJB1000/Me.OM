@@ -59,7 +59,42 @@
       text-align: center;
       margin-top: 0.5em;
       color: #666;
-    }
+  }
+  #peakfinder-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 1000;
+      display: none;
+  }
+  
+  #peakfinder-header {
+      height: 50px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+      border-bottom: 1px solid #ccc;
+  }
+  
+  #peakfinder-iframe {
+      width: 100%;
+      height: calc(100% - 50px);
+      border: none;
+  }
+  
+  #close-peakfinder {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
   </style>
 </head>
 <body>
@@ -78,6 +113,14 @@
     <h2>Données OSM</h2>
     <table id="paramTable" class="stripped"></table>
   </section>
+
+  <div id="peakfinder-overlay">
+    <!-- <div id="peakfinder-header">
+        <span>Peakfinder</span>
+        <button id="close-peakfinder" onclick="closePeakfinder()">Fermer</button>
+    </div> -->
+    <iframe id="peakfinder-iframe" src="about:blank"></iframe>
+  </div>
 
   <footer>
     <p>Informations complémentaires à Oruxmaps</p>

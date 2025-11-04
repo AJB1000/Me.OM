@@ -29,6 +29,7 @@ const buildLinks = (locality = null, offline = false) => {
     if ('ref:refuges.info' in extras) {
         refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
         delete extras['ref:refuges.info']
+        console.log(refugeInfoUrl)
     }
     if ('ref:campwild.org' in extras) {
         campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`

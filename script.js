@@ -44,7 +44,7 @@ const buildLinks = (locality = null, offline = false) => {
     }
 
     if ('wikidata' in extras) {
-        wikidataUrl += `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
+        const wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
         delete extras['wikidata']
     }
 

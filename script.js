@@ -25,28 +25,7 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
-    let refugeInfoUrl = "", campwildUrl = ""
-    if ('ref:refuges.info' in extras) {
-        refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
-        delete extras['ref:refuges.info']
-        console.log(32, refugeInfoUrl)
-    }
-    if ('ref:campwild.org' in extras) {
-        campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
-        delete extras['ref:campwild.org']
-    }
-    let refugesUrl = ""
-    if ('ref:refuges.info' in extras) {
-        refugesUrl = `<tr><td>${refugeInfoUrl}</td><td></td></tr>`
-    }
-    if ('ref:campwild.org' in extras) {
-        refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
-    }
-    if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
-        refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
-    }
-    console.log(refugesUrl)
-
+    refugesUrl(extras)
     let wikidataUrl = ""
     if ('wikidata' in extras) {
         wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
@@ -129,5 +108,36 @@ async function getLocalityGeoNames(lat, lon) {
     } catch (err) {
         console.warn('Erreur avec Nominatim :', err);
         return 'Inconnue (offline ?)';
+    }
+}
+
+async function refugesUrl(extras) {
+    try {
+        let refugeInfoUrl = "", campwildUrl = ""
+        if ('ref:refuges.info' in extras) {
+            refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
+            delete extras['ref:refuges.info']
+            console.log(32, refugeInfoUrl)
+        }
+        if ('ref:campwild.org' in extras) {
+            campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
+            delete extras['ref:campwild.org']
+        }
+        let refugesUrl = ""
+        if ('ref:refuges.info' in extras) {
+            refugesUrl = `<tr><td>${refugeInfoUrl}</td><td></td></tr>`
+        }
+        if ('ref:campwild.org' in extras) {
+            refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
+        }
+        if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
+            refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
+        }
+        console.log(refugesUrl)
+        return refugesUrl
+
+    } catch (err) {
+        console.warn('Erreur avec refugesUrl :', err);
+        return 'Inconnue (refugesUrl)';
     }
 }

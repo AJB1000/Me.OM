@@ -25,7 +25,7 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
-    getRefuges(extras, disable)
+    const refugesUrl = getRefuges(extras, disable)
     let wikidataUrl = ""
     if ('wikidata' in extras) {
         wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`

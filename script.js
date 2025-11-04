@@ -25,7 +25,7 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
-    refugesUrl(extras, disable)
+    getRefuges(extras, disable)
     let wikidataUrl = ""
     if ('wikidata' in extras) {
         wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
@@ -111,7 +111,7 @@ async function getLocalityGeoNames(lat, lon) {
     }
 }
 
-async function refugesUrl(extras, disable) {
+async function getRefuges(extras, disable) {
     try {
         let refugeInfoUrl = "", campwildUrl = ""
         if ('ref:refuges.info' in extras) {

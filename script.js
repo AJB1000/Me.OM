@@ -43,8 +43,9 @@ const buildLinks = (locality = null, offline = false) => {
         refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
     }
 
+    let wikidataUrl = ""
     if ('wikidata' in extras) {
-        const wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
+        wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
         delete extras['wikidata']
     }
 

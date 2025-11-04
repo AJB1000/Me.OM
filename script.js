@@ -62,8 +62,7 @@ const buildLinks = (locality = null, offline = false) => {
     <td>${wikidataUrl}</td></tr>
     <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
-    <tr><td><${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
-    <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
+    ${refugesUrl}
     <tr><td><a class="${disable}" href="https://www.rome2rio.com/fr/map/${loc}">Transports</a></td>
     <td><a class="${disable}" href="https://www.booking.com/searchresults.fr.html?ss=${loc}&group_adults=2&group_children=0&no_rooms=1&checkin=${dayf}&checkout=${tomorrowf}">Hébergements</a></td></tr>
   `;

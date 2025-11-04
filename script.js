@@ -27,6 +27,7 @@ const buildLinks = (locality = null, offline = false) => {
     let refugeUrl = ""
     refugeUrl += ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref.refuges.info']}">Refuges-info,nbsp;</a>` : ""
     refugeUrl += ('campwild' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['campwild']}">Campwild.org</a>` : ""
+    console.log(refugeUrl)
 
     const day = new Date()
     const dayf = day.toISOString().split('T')[0]

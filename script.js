@@ -38,9 +38,11 @@ const buildLinks = (locality = null, offline = false) => {
     let refugesUrl = ""
     if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
         refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
-    } else if ('ref:refuges.info' in extras) {
+    }
+    if ('ref:refuges.info' in extras) {
         refugesUrl = `<tr><td>${refugeInfoUrl}</td><td></td></tr>`
-    } else if ('ref:campwild.org' in extras) {
+    }
+    if ('ref:campwild.org' in extras) {
         refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
     }
 

@@ -25,13 +25,13 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
-    // let refugeUrl = ""
+    let refugeInfoUrl = "", campwildUrl = ""
     if ('ref:refuges.info' in extras) {
-        const refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
+        refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
         delete extras['ref:refuges.info']
     }
     if ('ref:campwild.org' in extras) {
-        const campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
+        campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
         delete extras['ref:campwild.org']
     }
     let refugesUrl = ""

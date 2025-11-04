@@ -10,6 +10,7 @@ const extras = {};
 for (const [key, val] of params.entries()) {
     if (!['lon', 'lat', 'zoom'].includes(key)) extras[key] = val;
 }
+console.log(extras)
 
 // --- Update static fields immediately ---
 const lonT = lon >= 0 ? Math.round(lon * 10000) / 10000 + 'E' : lon < 0 ? Math.round(lon * 10000) / 10000 + 'W' : '?'

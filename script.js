@@ -29,22 +29,23 @@ const buildLinks = (locality = null, offline = false) => {
     if ('ref:refuges.info' in extras) {
         refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
         delete extras['ref:refuges.info']
-        console.log(refugeInfoUrl)
+        console.log(32, refugeInfoUrl)
     }
     if ('ref:campwild.org' in extras) {
         campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
         delete extras['ref:campwild.org']
     }
     let refugesUrl = ""
-    if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
-        refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
-    }
     if ('ref:refuges.info' in extras) {
         refugesUrl = `<tr><td>${refugeInfoUrl}</td><td></td></tr>`
     }
     if ('ref:campwild.org' in extras) {
         refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
     }
+    if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
+        refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
+    }
+    console.log(refugesUrl)
 
     let wikidataUrl = ""
     if ('wikidata' in extras) {

@@ -26,7 +26,7 @@ const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
     let refugeUrl = ""
-    refugeUrl += ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref.refuges.info']}">Refuges-info, &nbsp;</a>` : ""
+    refugeUrl += ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info, &nbsp;</a>` : ""
     refugeUrl += ('campwild' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['campwild']}">Campwild.org</a>` : ""
     console.log(refugeUrl)
 

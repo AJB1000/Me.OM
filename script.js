@@ -25,11 +25,12 @@ const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
     let refugeUrl = ""
-    refugeUrl += ('refuges_info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['refuges_info']}">Refuges-info,nbsp;</a>` : ""
+    refugeUrl += ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref.refuges.info']}">Refuges-info,nbsp;</a>` : ""
     refugeUrl += ('campwild' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['campwild']}">Campwild.org</a>` : ""
 
     const day = new Date()
     const dayf = day.toISOString().split('T')[0]
+    //  ajout de 1 à day
     day.setDate(day.getDate() + 1);
     const tomorrowf = day.toISOString().split('T')[0]
 

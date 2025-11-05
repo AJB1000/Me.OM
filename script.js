@@ -1,8 +1,8 @@
 // === git04 ===
 // --- Parse URL parameters ---
 const params = new URLSearchParams(window.location.search);
-let lon = params.get('lon');
-let lat = params.get('lat');
+let lon = params.get('lon').trim()
+let lat = params.get('lat').trim()
 const zoom = params.get('zoom');
 console.log(lon, lat)
 
@@ -14,9 +14,8 @@ for (const [key, val] of params.entries()) {
 var refugesUrl = ""
 
 // --- Update static fields immediately ---
-let lonT = Math.abs(Math.round(lon * 10000) / 10000)
-let latT = Math.abs(Math.round(lat * 10000) / 10000)
-
+let lonT = Math.abs(Math.round(lon * 1000) / 1000)
+let latT = Math.abs(Math.round(lat * 1000) / 1000)
 document.getElementById('lon').textContent = (lon >= 0) ? lonT + 'E' : lonT + 'W'
 document.getElementById('lat').textContent = (lat >= 0) ? latT + 'N' : latT + 'S'
 

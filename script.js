@@ -72,7 +72,9 @@ const status = document.getElementById('status');
 if (offline) {
     buildLinks(null, true);
     document.getElementById('locality').textContent = 'Localité indisponible (offline)';
+    document.getElementById('linksTitle').textContent = 'Liens indisponibles (offline)';
 } else {
+    document.getElementById('linksTitle').textContent = 'Liens utiles';
     buildLinks();
     getLocalityGeoNames(lat, lon)
         .then(locality => {

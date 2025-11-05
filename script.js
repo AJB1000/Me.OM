@@ -25,27 +25,21 @@ const linkList = document.getElementById('linkList');
 const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
-    const refugesUrl = getRefuges(extras, disable)
-    let wikidataUrl = ""
-    if ('wikidata' in extras) {
-        wikidataUrl = `<a class="${disable}" href="https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a>`
-        delete extras['wikidata']
-    }
+    const extrasUrl = getExtrasUrl(extras, disable)
+    console.log(extrasUrl)
 
     const day = new Date()
     const dayf = day.toISOString().split('T')[0]
-    //  ajout de 1 jour à day
-    day.setDate(day.getDate() + 1);
+    day.setDate(day.getDate() + 1)     //  ajout de 1 jour à day
     const tomorrowf = day.toISOString().split('T')[0]
 
     linkList.innerHTML = `
     <tr><td><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></td>
     <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike">Komoot</a></td></tr>
-    <tr><td><a class="${disable}" href="https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}">Wikipedia proches</a></td>
-    <td>${wikidataUrl}</td></tr>
+    <tr>${extrasUrl[0]}</tr>
     <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
-    <tr>${refugesUrl}</tr>
+    <tr>${extrasUrl[1]}</tr>
     <tr><td><a class="${disable}" href="https://www.rome2rio.com/fr/map/${loc}">Transports</a></td>
     <td><a class="${disable}" href="https://www.booking.com/searchresults.fr.html?ss=${loc}&group_adults=2&group_children=0&no_rooms=1&checkin=${dayf}&checkout=${tomorrowf}">Hébergements</a></td></tr>
   `;
@@ -58,10 +52,11 @@ if (Object.keys(extras).length === 0) {
     table.innerHTML = '<tr><td>Aucun paramètre additionnel</td></tr>';
 } else {
     // Clés à exclure de l'affichage de la table
-    const exclude = new Set(['ref:refuges.info', 'ref:campwild.org', 'nl']);
+    const exclude = ['ref:refuges.info', 'ref:campwild.org', 'wikidata', 'nl'];
     // Filtrer les extras en supprimant les clés dans exclude
     const filtered = Object.fromEntries(
-        Object.entries(extras).filter(([key]) => !exclude.has(key))
+        // si l'array exclude ne contient pas la key => true et on garde key
+        Object.entries(extras).filter(([key]) => !exclude.includes(key))
     );
     // on affiche filtered
     table.innerHTML = `
@@ -118,11 +113,26 @@ async function getLocalityGeoNames(lat, lon) {
     }
 }
 
-function getRefuges(extras, disable) {
-    const refugeInfoUrl = ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>` : null
-    const campwildUrl = ('ref:campwild.org' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>` : null
-    if (refugeInfoUrl && campwildUrl) refugesUrl = `<td>${refugeInfoUrl}</td><td>${campwildUrl}</td>`
-    if (refugeInfoUrl && campwildUrl == null) refugesUrl = `<td>${refugeInfoUrl}</td><td></td>`
-    if (refugeInfoUrl == null && campwildUrl) refugesUrl = `<td>${campwildUrl}</td><td></td>`
-    return refugesUrl
+function getExtrasUrl(extras, disable) {
+    let refugesUrl = [], wikiUrl = []
+    refugesUrl.push(('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>` : null)
+    refugesUrl.push(('ref:campwild.org' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>` : null)
+    // filtrage suppression des null dans refugesUrl
+    refugesUrl = refugesUrl.filter(el => el)
+    if (refugesUrl.length >= 2) refugesUrl = `<td>${refugesUrl[0]}</td><td>${refugesUrl[1]}</td>`
+    if (refugesUrl.length == 1) refugesUrl = `<td>${refugesUrl[0]}</td><td></td>`
+    // construction du lien wikipedia dans osm: wikipedia=fr:.....=> fr.wikipedia.org/wiki/....
+    if ('wikipedia' in extras) {
+        const wikipedia = extras['wikipedia'].replace(/(.*):(.*)/gm, `$1.wikipedia.org/wiki/$2`)
+        wikiUrl.push(`<a class="${disable}" href="https://${wikipedia}">Wikipedia</a>`)
+    }
+    wikiUrl.push(`<a class="${disable}" href="https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}">Wikipedia proches</a > `)
+    wikiUrl.push(('wikidata' in extras) ? `< a class= "${disable}" href = "https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a> ` : null)
+    wikiUrl = wikiUrl.filter(el => el)
+    if (wikiUrl.length >= 2) wikiUrl = `<td> ${wikiUrl[0]}</td><td>${wikiUrl[1]}</td>`
+    if (wikiUrl.length == 1) wikiUrl = `<td> ${wikiUrl[0]}</td><td></td>`
+
+    return [wikiUrl, refugesUrl]
 }
+
+

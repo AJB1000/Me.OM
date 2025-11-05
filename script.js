@@ -26,7 +26,6 @@ const buildLinks = (locality = null, offline = false) => {
     const disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
     const extrasUrl = getExtrasUrl(extras, disable)
-    console.log(extrasUrl)
 
     const day = new Date()
     const dayf = day.toISOString().split('T')[0]
@@ -52,7 +51,7 @@ if (Object.keys(extras).length === 0) {
     table.innerHTML = '<tr><td>Aucun paramètre additionnel</td></tr>';
 } else {
     // Clés à exclure de l'affichage de la table
-    const exclude = ['ref:refuges.info', 'ref:campwild.org', 'wikidata', 'nl'];
+    const exclude = ['ref:refuges.info', 'ref:campwild.org', 'wikidata', 'wikipedia', 'nl'];
     // Filtrer les extras en supprimant les clés dans exclude
     const filtered = Object.fromEntries(
         // si l'array exclude ne contient pas la key => true et on garde key

@@ -10,7 +10,7 @@ const extras = {};
 for (const [key, val] of params.entries()) {
     if (!['lon', 'lat', 'zoom'].includes(key)) extras[key] = val;
 }
-console.log(extras, extras['ref:refuges.info'])
+var refugesUrl = ""
 
 // --- Update static fields immediately ---
 const lonT = lon >= 0 ? Math.round(lon * 10000) / 10000 + 'E' : lon < 0 ? Math.round(lon * 10000) / 10000 + 'W' : '?'
@@ -45,7 +45,7 @@ const buildLinks = (locality = null, offline = false) => {
     <td>${wikidataUrl}</td></tr>
     <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
-    ${refugesUrl}
+    <tr>${refugesUrl}</tr>
     <tr><td><a class="${disable}" href="https://www.rome2rio.com/fr/map/${loc}">Transports</a></td>
     <td><a class="${disable}" href="https://www.booking.com/searchresults.fr.html?ss=${loc}&group_adults=2&group_children=0&no_rooms=1&checkin=${dayf}&checkout=${tomorrowf}">Hébergements</a></td></tr>
   `;
@@ -57,9 +57,16 @@ const table = document.getElementById('paramTable');
 if (Object.keys(extras).length === 0) {
     table.innerHTML = '<tr><td>Aucun paramètre additionnel</td></tr>';
 } else {
+    // Clés à exclure de l'affichage de la table
+    const exclude = new Set(['ref:refuges.info', 'ref:campwild.org', 'nl']);
+    // Filtrer les extras en supprimant les clés dans exclude
+    const filtered = Object.fromEntries(
+        Object.entries(extras).filter(([key]) => !exclude.has(key))
+    );
+    // on affiche filtered
     table.innerHTML = `
     <tr><th>Attributs</th><th>Valeur</th></tr>
-    ${Object.entries(extras)
+    ${Object.entries(filtered)
             .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`)
             .join('')}
   `;
@@ -111,33 +118,11 @@ async function getLocalityGeoNames(lat, lon) {
     }
 }
 
-async function getRefuges(extras, disable) {
-    try {
-        let refugeInfoUrl = "", campwildUrl = ""
-        if ('ref:refuges.info' in extras) {
-            refugeInfoUrl = `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>`
-            delete extras['ref:refuges.info']
-            console.log(32, refugeInfoUrl)
-        }
-        if ('ref:campwild.org' in extras) {
-            campwildUrl = `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>`
-            delete extras['ref:campwild.org']
-        }
-        let refugesUrl = ""
-        if ('ref:refuges.info' in extras) {
-            refugesUrl = `<tr><td>${refugeInfoUrl}</td><td></td></tr>`
-        }
-        if ('ref:campwild.org' in extras) {
-            refugesUrl = `<tr><td>${campwildUrl}</td><td></td></tr>`
-        }
-        if ('ref:refuges.info' in extras && 'ref:campwild.org' in extras) {
-            refugesUrl = `<tr><td>${refugeInfoUrl}</td><td>${campwildUrl}</td></tr>`
-        }
-        console.log(refugesUrl)
-        return refugesUrl
-
-    } catch (err) {
-        console.warn('Erreur avec refugesUrl :', err);
-        return 'Inconnue (refugesUrl)';
-    }
+function getRefuges(extras, disable) {
+    const refugeInfoUrl = ('ref:refuges.info' in extras) ? `<a class="${disable}" href="https://www.refuges.info/point/${extras['ref:refuges.info']}">Refuges-info</a>` : null
+    const campwildUrl = ('ref:campwild.org' in extras) ? `<a class="${disable}" href="https://map.campwild.org/places/${extras['ref:campwild.org']}">Refuges Campwild</a>` : null
+    if (refugeInfoUrl && campwildUrl) refugesUrl = `<td>${refugeInfoUrl}</td><td>${campwildUrl}</td>`
+    if (refugeInfoUrl && campwildUrl == null) refugesUrl = `<td>${refugeInfoUrl}</td><td></td>`
+    if (refugeInfoUrl == null && campwildUrl) refugesUrl = `<td>${campwildUrl}</td><td></td>`
+    return refugesUrl
 }

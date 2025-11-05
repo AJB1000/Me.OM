@@ -4,6 +4,7 @@ const params = new URLSearchParams(window.location.search);
 let lon = params.get('lon');
 let lat = params.get('lat');
 const zoom = params.get('zoom');
+console.log(lon, lat)
 
 // --- Extra parameters ---
 const extras = {};
@@ -13,11 +14,11 @@ for (const [key, val] of params.entries()) {
 var refugesUrl = ""
 
 // --- Update static fields immediately ---
-const lonT = lon >= 0 ? Math.round(lon * 10000) / 10000 + 'E' : lon < 0 ? Math.round(lon * 10000) / 10000 + 'W' : '?'
-const latT = lat >= 0 ? Math.round(lat * 10000) / 10000 + 'N' : lat < 0 ? Math.round(lat * 10000) / 10000 + 'S' : '?'
+let lonT = Math.abs(Math.round(lon * 10000) / 10000)
+let latT = Math.abs(Math.round(lat * 10000) / 10000)
 
-document.getElementById('lon').textContent = lonT
-document.getElementById('lat').textContent = latT
+document.getElementById('lon').textContent = (lon >= 0) ? lonT + 'E' : lonT + 'W'
+document.getElementById('lat').textContent = (lat >= 0) ? latT + 'N' : latT + 'S'
 
 // --- Build links (base) ---
 const linkList = document.getElementById('linkList');
@@ -34,7 +35,7 @@ const buildLinks = (locality = null, offline = false) => {
 
     linkList.innerHTML = `
     <tr><td><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></td>
-    <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike">Komoot</a></td></tr>
+    <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},14z?sport=hike">Komoot</a></td></tr>
     <tr>${extrasUrl[0]}</tr>
     <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${latT}${lonT}">Météo 7 jours</a></td></tr>
@@ -43,7 +44,6 @@ const buildLinks = (locality = null, offline = false) => {
     <td><a class="${disable}" href="https://www.booking.com/searchresults.fr.html?ss=${loc}&group_adults=2&group_children=0&no_rooms=1&checkin=${dayf}&checkout=${tomorrowf}">Hébergements</a></td></tr>
   `;
 };
-
 
 // --- Build parameter table ---
 const table = document.getElementById('paramTable');

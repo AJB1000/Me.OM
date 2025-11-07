@@ -66,12 +66,15 @@ if (Object.keys(extras).length === 0) {
 }
 
 // --- Detect offline mode ---
-const offline = !navigator.onLine;
+// si la valeur retournée par navigator.connection.effectiveType n'est pas 3g minimum on passe offline
+lanOK = ['3g', '4g', '5g']
+const online = (navigator.onLine && lanOK.includes(navigator.connection.effectiveType))
+// const offline = !navigator.onLine;
 const status = document.getElementById('status');
-if (offline) {
+if (!online) {
     buildLinks(null, true);
     document.getElementById('locality').textContent = 'Localité indisponible (offline)';
-    document.getElementById('linksTitle').textContent = 'Liens indisponibles (offline)';
+    // document.getElementById('linksTitle').textContent = 'Liens indisponibles (offline)';
 } else {
     document.getElementById('linksTitle').textContent = 'Liens utiles';
     buildLinks();

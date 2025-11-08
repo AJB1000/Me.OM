@@ -33,9 +33,9 @@ const buildLinks = (locality = null, offline = false) => {
     const tomorrowf = day.toISOString().split('T')[0]
 
     linkList.innerHTML = `
+    <tr>${extrasUrl[0]}</tr>
     <tr><td><a class="${disable}" href="https://www.google.com/maps/place/@${lat},${lon},14z">Google Maps</a></td>
     <td><a class="${disable}" href="https://www.komoot.com/fr-fr/plan/@${lat},${lon},14z?sport=hike">Komoot</a></td></tr>
-    <tr>${extrasUrl[0]}</tr>
     <tr><td><a class="${disable}" href="https://www.peakfinder.com/?lat=${lat}&lng=${lon}">Sommets proches</a></td>
     <td><a class="${disable}" href="https://www.meteoblue.com/fr/meteo/semaine/${lat}N${lon}E">Météo 7 jours</a></td></tr>
     <tr>${extrasUrl[1]}</tr>
@@ -129,13 +129,16 @@ function getExtrasUrl(extras, disable) {
         const wikipedia = extras['wikipedia'].replace(/(.*):(.*)/gm, `$1.wikipedia.org/wiki/$2`)
         wikiUrl.push(`<a class="${disable}" href="https://${wikipedia}">Wikipedia</a>`)
     }
+    wikiUrl.push(`<a class="${disable}" href="https://commons.wikimedia.org/wiki/Special:MediaSearch?search=${extras['name']}">Wiki Commons</a> `)
     wikiUrl.push(`<a class="${disable}" href="https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}">Wikipedia proches</a > `)
-    wikiUrl.push(('wikidata' in extras) ? `< a class= "${disable}" href = "https://https://www.wikidata.org/wiki/${extras['wikidata']}">Wikidata</a> ` : null)
+    // enleve les null, blancs et undefined de wikiUtl
     wikiUrl = wikiUrl.filter(el => el)
-    if (wikiUrl.length >= 2) wikiUrl = `<td> ${wikiUrl[0]}</td><td>${wikiUrl[1]}</td>`
+    if (wikiUrl.length == 3) wikiUrl = `<td> ${wikiUrl[0]}</td><td>${wikiUrl[1]}</td></tr><tr><td>${wikiUrl[2]}</td><td></td>`
+    if (wikiUrl.length == 2) wikiUrl = `<td> ${wikiUrl[0]}</td><td>${wikiUrl[1]}</td>`
     if (wikiUrl.length == 1) wikiUrl = `<td> ${wikiUrl[0]}</td><td></td>`
 
     return [wikiUrl, refugesUrl]
 }
 
 
+// https://commons.wikimedia.org/wiki/Special:MediaSearch?search=Ch%C3%A2teau+de+Sch%C5%93neck

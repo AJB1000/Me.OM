@@ -4,6 +4,7 @@ const params = new URLSearchParams(window.location.search);
 let lon = params.get('lon').trim()
 let lat = params.get('lat').trim()
 const zoom = params.get('zoom');
+let disable = ''
 console.log(lon, lat)
 
 // --- Extra parameters ---
@@ -23,7 +24,7 @@ document.getElementById('lat').textContent = (lat >= 0) ? latT + 'N' : latT + 'S
 const linkList = document.getElementById('linkList');
 
 const buildLinks = (locality = null, offline = false) => {
-    const disable = offline ? 'disabled' : '';
+    disable = offline ? 'disabled' : '';
     const loc = locality ? encodeURIComponent(locality) : '';
     const extrasUrl = getExtrasUrl(extras, disable)
 
@@ -76,8 +77,12 @@ if (!online) {
     document.getElementById('locality').textContent = 'Localité indisponible (offline)';
     // document.getElementById('linksTitle').textContent = 'Liens indisponibles (offline)';
 } else {
+    getWikiId(lat, lon)
+        .then(data => {
+            console.log(data)
+        })
     document.getElementById('linksTitle').textContent = 'Liens utiles';
-    buildLinks();
+    buildLinks()
     getLocalityGeoNames(lat, lon)
         .then(locality => {
             if (!locality) locality = 'Localité inconnue';
@@ -115,6 +120,53 @@ async function getLocalityGeoNames(lat, lon) {
         return 'Inconnue (offline ?)';
     }
 }
+async function getWikiData(qid) {
+    try {
+        const urlWikiSearch = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${qid}&props=claims|sitelinks&languages=fr&sitefilter=frwiki|dewiki|commonswiki&format=json&origin=*`;
+        const data = await (await fetch(urlWikiSearch)).json()
+        const claims = data.entities[qid].claims
+        const googleSearch = data.entities[qid].claims['P646'] || false
+        const commons = data.entities[qid].sitelinks.commonswiki || false
+        const wikipedia = data.entities[qid].sitelinks.frwiki || data.entities[qid].sitelinks.dewiki || false
+        console.log(googleSearch, commons, wikipedia)
+        if (googleSearch || commons || wikipedia) {
+            let wikiurl = []
+            wikiurl.push((googleSearch) ? `<a class="${disable}" href="https://www.google.com/search?kgmid=${googleSearch[0].mainsnak.datavalue.value}">Recherche Google</a>` : null)
+            wikiurl.push((commons) ? `<a class="${disable}" href="https://commons.wikimedia.org/wiki/${commons.title}">Wiki Commons</a>` : null)
+            const wiki = (wikipedia.site == 'frwiki') ? ['fr', wikipedia.title] : (wikipedia.site == 'dewiki') ? ['de', wikipedia.title] : null
+            wikiurl.push((wiki) ? `<a class="${disable}" href="https://${wiki[0]}.wikipedia.org/wiki/${wiki[1]}">Wikipedia</a>` : null)
+            wikiurl = wikiurl.filter(el => el)
+            console.log(136, wikiurl)
+            return wikiurl
+        } else {
+            console.log("Aucune entité trouvée près de ces coordonnées.");
+            return ["Aucune entité trouvée près de ces coordonnées."]
+        }
+    } catch (err) {
+        console.warn('Erreur avec wikidata :', err);
+    }
+}
+
+async function getWikiId(lat, lon) {
+    try {
+        const urlGeoSearch = `https://www.wikidata.org/w/api.php?action=query&list=geosearch&gscoord=${lat}|${lon}&gslimit=1&format=json&prop=pageprops&gsradius=1000&origin=*`;
+        // const resp = await fetch(urlGeoSearch)
+        const data = await (await fetch(urlGeoSearch)).json()
+        if (data.query.geosearch.length > 0) {
+            // Le titre de la page MédiaWiki est le nom de l'entité
+            const qid = data.query.geosearch[0].title
+            console.log(`QID trouvé via géosearch : ${qid}`);
+            // Passez à l'Étape B : recherche des données wikidata
+            return await getWikiData(qid);
+        } else {
+            console.log("Aucune entité trouvée près de ces coordonnées.");
+        }
+    } catch (err) {
+        console.warn('Erreur avec wikidata :', err);
+    }
+}
+
+
 
 function getExtrasUrl(extras, disable) {
     let refugesUrl = [], wikiUrl = []

@@ -76,6 +76,20 @@
       background-color: hwb(6 18% 29%);
   }
 
+  /* Spinner inline : après le texte */
+  a.loading::after {
+    content: "";
+    display: inline-block;
+    width:  12px;
+    height: 12px;
+    margin-left: 6px;
+    border: 2px solid #e74c3c;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   </style>
 </head>
 <body>
@@ -86,8 +100,32 @@
   <section id="links">
     <!-- <a class="${disable} button" href="https://drive.google.com/drive/folders/1743h7oWibItiu4C7dnBzsJbp9QGJ48Bg?usp=sharing_eil&ts=690f17ab" style="position: relative; float:right;">Cartes</a> -->
     <h2 id="linksTitle">Liens utiles</h2>
-    <table id="linkList"></table>
-    <!-- <div id="linkList">Chargement des liens...</div> -->
+    <table id="linkList">
+      <tr>
+        <td><a class="loading" id="wiki0" href="#">Wikipedia</a></td>
+        <td><a class="loading" id="wiki1" href="#">Wikipedia proches</a></td>
+      </tr>
+      <tr>
+        <td><a class="loading" id="wiki2" href="#">Wikipedia commons</a></td>
+        <td><a class="loading" id="wiki3" href="#">Recheche google</a></td>
+      </tr>
+      <tr>
+        <td><a class="loading" id="extras0" href="#">Refuge-info</a></td>
+        <td><a class="loading" id="extras1" href="#">Refuge Campwild</a></td>
+      </tr>
+      <tr>
+        <td><a id="carte0" href="#">Google Maps</a></td>
+        <td><a id="carte1" href="#">Komoot</a></td>
+      </tr>
+      <tr>
+        <td><a id="divers0" href="#">Sommets proches</a></td>
+        <td><a id="divers1" href="#">Météo 7 jours</a></td>
+      </tr>
+      <tr>
+        <td><a id="transheb0" class="loading" href="#">Transports</a></td>
+        <td><a id="transheb1" class="loading" href="#">Hébergements</a></td>
+      </tr>
+    </table>
   </section>
 
   <section id="info">

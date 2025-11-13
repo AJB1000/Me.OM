@@ -1,7 +1,8 @@
-let CACHE_NAME = 'pwa-git03-v64';
+/* =========  CONFIGURATION  ========= */
+const VERSION = 'v2';                       // ← changez ici pour forcer la MAJ
+const CACHE_NAME = `meom-${VERSION}`;
 const BASE_URL = self.location.pathname.replace(/sw\.js$/, '');
-
-const urlsToCache = [
+const SHELL_URLS = [
     `${BASE_URL}`,
     `${BASE_URL}index.html`,
     `${BASE_URL}script.js`,
@@ -11,45 +12,52 @@ const urlsToCache = [
     `${BASE_URL}icons/icon-512.png`
 ];
 
-self.addEventListener('install', event => {
-    console.log('[SW] Installation');
-    self.skipWaiting();
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+/* =========  INSTALL  ========= */
+self.addEventListener('install', evt => {
+    evt.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(SHELL_URLS))
+            .then(() => self.skipWaiting())       // active le nouveau SW immédiatement
     );
 });
 
-self.addEventListener('activate', event => {
-    console.log('[SW] Activation');
-    self.clients.claim();
-    event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-        )
+/* =========  ACTIVATE  ========= */
+self.addEventListener('activate', evt => {
+    // on supprime les vieux caches
+    evt.waitUntil(
+        caches.keys()
+            .then(names => Promise.all(
+                names.map(n => n !== CACHE_NAME && caches.delete(n))
+            ))
+            .then(() => self.clients.claim())     // prend le contrôle des onglets ouverts
     );
 });
 
-self.addEventListener('fetch', event => {
-    const requestURL = new URL(event.request.url);
+/* =========  FETCH  ========= */
+self.addEventListener('fetch', evt => {
+    const url = new URL(evt.request.url);
 
-    // On intercepte uniquement les requêtes du même domaine
-    if (requestURL.origin === location.origin) {
-        event.respondWith(
-            caches.match(event.request).then(response => {
-                // 1️⃣ Si on a une version dans le cache, on la renvoie
-                if (response) return response;
-
-                // 2️⃣ Sinon, on essaie le réseau
-                return fetch(event.request).catch(() => {
-                    // 3️⃣ Si offline et la requête est pour index.html (même avec paramètres)
-                    if (event.request.mode === 'navigate' || requestURL.pathname.endsWith('index.html')) {
-                        console.log('[SW] Fetch Offline');
-                        return caches.match(`${BASE_URL}index.html`);
-                    }
-                    // 4️⃣ En dernier recours, on renvoie une réponse vide (pas undefined)
-                    return new Response('Offline', { status: 503, statusText: 'Offline' });
-                });
-            })
+    /* 1) Si c’est index.html (quelques soient les params) → cache-first */
+    if (url.pathname.endsWith('/index.html')) {
+        evt.respondWith(
+            caches.match(`${BASE_URL}index.html`)           // clé *sans* query-string
+                .then(resp => resp || fetch(evt.request))
         );
+        return;
     }
+
+    /* 2) Si c’est script.js → cache-first */
+    if (url.pathname.endsWith('/script.js')) {
+        evt.respondWith(
+            caches.match(`${BASE_URL}script.js`)
+                .then(resp => resp || fetch(evt.request))
+        );
+        return;
+    }
+
+    /* 3) Tout le reste (API, images, etc.) → network-first */
+    evt.respondWith(
+        fetch(evt.request)
+            .catch(() => caches.match(evt.request)) // éventuel fallback
+    );
 });

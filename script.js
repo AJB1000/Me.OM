@@ -47,7 +47,6 @@ function buildOsmTable(extras) {
       `;
     }
 }
-
 // --- Création des liens pour la table de liens
 async function buildLinksTable() {
     // --- Detect offline mode ---
@@ -61,7 +60,7 @@ async function buildLinksTable() {
         document.getElementById('locality').textContent = 'Localité indisponible (offline)';
     } else {
         // Etape 1 uniquement les liens avec lon/lat car aucune recherche, affichage immediat
-        showLinks({ 'carte0': `https://www.google.com/maps/place/@${lat},${lon},14z`, 'carte1': `https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike`, 'divers0': `https://www.peakfinder.com/?lat=${lat}&lng=${lon}`, 'divers1': `https://www.meteoblue.com/fr/meteo/semaine/${latT}N${lonT}E`, 'wiki1': `https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}` })
+        lonlatLinks()
         //  Etape 2 : liens dépendant du nom de la localité
         getLocalityGeoNames(lat, lon)
             .then(locality => {
@@ -99,6 +98,9 @@ function showLinks(links) {
             el.className = 'disabled'
         }
     }
+}
+function lonlatLinks() {
+    showLinks({ 'carte0': `https://www.google.com/maps/place/@${lat},${lon},14z`, 'carte1': `https://www.komoot.com/fr-fr/plan/@${lat},${lon},16z?sport=hike`, 'divers0': `https://www.peakfinder.com/?lat=${lat}&lng=${lon}`, 'divers1': `https://www.meteoblue.com/fr/meteo/semaine/${latT}N${lonT}E`, 'wiki1': `https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Nearby#/coord/${lat},${lon}` })
 }
 // === GeoNames (Nominatim fallback) ===
 async function getLocalityGeoNames(lat, lon) {

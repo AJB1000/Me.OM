@@ -51,7 +51,7 @@ function buildOsmTable(extras) {
 async function buildLinksTable() {
     // --- Detect offline mode ---
     // si la valeur retournée par navigator.connection.effectiveType n'est pas 3g minimum on passe offline
-    lanOK = ['3g', '4g', '5g']
+    // lanOK = ['3g', '4g', '5g']
     // const online = (navigator.onLine && lanOK.includes(navigator.connection.effectiveType))
     const online = navigator.onLine
     // const offline = !navigator.onLine;

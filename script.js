@@ -52,7 +52,8 @@ async function buildLinksTable() {
     // --- Detect offline mode ---
     // si la valeur retournée par navigator.connection.effectiveType n'est pas 3g minimum on passe offline
     lanOK = ['3g', '4g', '5g']
-    const online = (navigator.onLine && lanOK.includes(navigator.connection.effectiveType))
+    // const online = (navigator.onLine && lanOK.includes(navigator.connection.effectiveType))
+    const online = navigator.onLine
     // const offline = !navigator.onLine;
     // const status = document.getElementById('status');
     if (!online) {
@@ -80,7 +81,7 @@ async function buildLinksTable() {
         // Etape 3 : liens wiki
         getWikis(lat, lon, extras).then(data => {
             showLinks({ 'wiki0': data[0], 'wiki2': data[1], 'wiki3': data[2] })
-        })
+        }).catch()
         // Etape 4 : liens divers
         getExtras(extras).then(data => {
             showLinks({ 'extras0': data[0], 'extras1': data[1] })
@@ -155,6 +156,7 @@ async function getWikis(lat, lon, extras) {
             }
         } else {
             console.log("Aucune entité trouvée près de ces coordonnées.");
+            return [null, null, null]
         }
     } catch (err) {
         console.warn('Erreur avec wikidata :', err);

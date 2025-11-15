@@ -19,7 +19,7 @@
     header, footer {
       text-align: center;
       padding: 0.5em;
-      background: #e74c3c;
+      background: linear-gradient(135deg, #e74c3c 0%, #be1300 100%);
       color: white;
       border-radius: 8px;
     }
@@ -29,6 +29,9 @@
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 15px;
     }
     a {
       color: #e74c3c;
@@ -97,9 +100,11 @@
     <h1 id="locality">Chargement...</h1>
     <p>Coordonnées: <span id="lat">?</span>, <span id="lon">?</span></p>
   </header>
-  <section id="links">
+  <section id="legende">
     <!-- <a class="${disable} button" href="https://drive.google.com/drive/folders/1743h7oWibItiu4C7dnBzsJbp9QGJ48Bg?usp=sharing_eil&ts=690f17ab" style="position: relative; float:right;">Cartes</a> -->
-    <a href="Legende.html">Légende</a>
+    <h2 id="legendeTitle"><a href="legende.html">Légende</a></h2>
+  </section>
+  <section id="links">
     <h2 id="linksTitle">Liens utiles</h2>
     <table id="linkList">
       <tr>

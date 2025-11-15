@@ -1,5 +1,5 @@
 /* =========  CONFIGURATION  ========= */
-const VERSION = 'v10';                       // ← changez ici pour forcer la MAJ
+const VERSION = 'v11';                       // ← changez ici pour forcer la MAJ
 const CACHE_NAME = `meom-${VERSION}`;
 const BASE_URL = self.location.pathname.replace(/sw\.js$/, '');
 const SHELL_URLS = [
